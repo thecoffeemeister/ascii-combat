@@ -29,6 +29,7 @@ MONSTER_SPECIES = {
     'knight':       ['Knight', 6, 3,        'jabbed'],
     'pbag':         ['Punching-Bag', 10, 0,       ''],
     'spbag':        ['Super-Punching-Bag', 999, 0,''],
+    'slime':        ['Slippery Slime', 10, 1,'squelched'],
 }
 
 # Different enemy arrangements
