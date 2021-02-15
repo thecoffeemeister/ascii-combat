@@ -99,7 +99,7 @@ def use_an(text, capitalize = False):
         a[0] = a[0].upper()
         a = ''.join(a)
     return a
-    
+
 # Simulates typing (I found it is a great way to make the player
 # read all the boring text in the game!)
 def typewriter(text, speed=1):

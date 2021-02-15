@@ -14,17 +14,17 @@ import colorama as C
 class Dungeon(cmd.Cmd):
 
     SCREEN_WIDTH = 80
-    
+
     # Stores all coin items, so check_coins() can calculate difference between it
     # and any coin item in inventory, Adding the difference to self.coins
     old_coins_list = []
     last_item_picked = None
 
-    inventory = ['apple', 'beef', 'sword', 'dagger']
+    inventory = []
     PROMPT_SIGN = '# '
 
     # String constants used for user interaction, They are supposed to be written
-    # in First-Person, some strings are placed in a list for those scenarios: 
+    # in First-Person, some strings are placed in a list for those scenarios:
     # 1. An item name will be inserted in the middle
     # 2. Multiple versions of same context to add variety to the dialogue (Nobody likes repitition)
     # main loop
@@ -63,7 +63,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     # (drop)
     NO_ITEM_GIVEN_DROP = '<!!> What should I drop? e.g. "drop apple"'
     BAD_DROP = "You cann't get rid of something you dont actually own"
-    
+
     # (buy)
     NOT_SHOP = "There is nothing to buy from here, this isn't a shop"
     BUY_ITEM = "You successfully purchased"
@@ -72,8 +72,8 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     NO_ITEM_GIVEN_BUY = '<!!> What should I buy? e.g. "buy bread"'
 
     # combat
-    MONSTER_CUT = ['A bunch of creepy monsters cut your path!', 'You take a step back, gazing at the overlooking beasts!',
-    'Few evil-looking creatures gaze at you mockingly', 'Creepy, spooky enemies block your way',
+    MONSTER_CUT = ['A bunch of creepy monsters cut your path!', 'You take a step back, gazing at the pouncing beasts!',
+    'A few evil-looking creatures gaze at you mockingly', 'Creepy, spooky enemies block your way',
     ]
 
     go_loadspeed = 2
@@ -85,17 +85,18 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             C.init()
         # Initialising all variables
         self.location = 'house_63'
+        self.player_hp = 10  #to store persistant hp, incidentally not working still
         self.current_room = ROOMS[self.location]
         self.coins = 0
         self.reset_color()
         self.player = player
-        self.coin_hack(500) # Give me some money!
+        self.coin_hack(1) # Give me some money!
         self.rooms = rooms
         self.intro = input(center_screen(banner('''. . . <Welcome to ASCII Combat . . .
 . . . Press Enter to Continue> . . .''')))
         self.prompt = self.PROMPT_SIGN + self.PROMPT_MSG
         self.INV_INTRO = "[{}'s {}]".format(self.player.name, self.INV_INTRO)
-    
+
     # cmd.Cmd functions overriding
     # Avoids repitition of last command
     def emptyline(self):
@@ -105,7 +106,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     def default(self, line):
         self.display_current_room()
         self.error_msg('"{}"!? {}'.format(line, self.UNKNOWN_CMD))
-    
+
     # Removes the help method
     def do_help(self, arg):
         self.display_current_room()
@@ -113,7 +114,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     # Pre/Post Loop functions
     def preloop(self):
         self.display_current_room()
-    
+
     def postloop(self):
         pass
 
@@ -151,7 +152,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
 
     @staticmethod
     def reset_color():
-        print(C.Back.BLACK + C.Fore.WHITE + C.Style.BRIGHT, end='') 
+        print(C.Back.BLACK + C.Fore.WHITE + C.Style.BRIGHT, end='')
 
     # Displays an error prompt, supports multi-line prompts
     def error_msg(self, text, wrap = True):
@@ -161,7 +162,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             _text = textwrap.wrap(text, self.SCREEN_WIDTH - len(self.PROMPT_SIGN))
             for line in _text:
                 print(self.PROMPT_SIGN + line)
-        else: 
+        else:
             print(self.PROMPT_SIGN + text)
         self.reset_color()
 
@@ -172,7 +173,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             _text = textwrap.wrap(text, self.SCREEN_WIDTH - len(self.PROMPT_SIGN))
             for line in _text:
                 print(self.PROMPT_SIGN + line)
-        else: 
+        else:
             print(self.PROMPT_SIGN + text)
         self.reset_color()
 
@@ -215,7 +216,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             print('{}{}{}| {}{}'.format(C.Fore.MAGENTA, k.upper(), (5 - len(k)) * ' ', C.Fore.CYAN, v))
         print()
         self.reset_color()
-    
+
     # Prints user info
     def display_player_info(self):
         p = self.player
@@ -230,8 +231,8 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
         # Printing colored stats
         c_user_stats = "{}[{}] {}[HP] {}/{} {}[Weapon] {} {}[Skill] {} {}[Coins] {}$".format(
         C.Fore.CYAN, p.name,
-        C.Fore.GREEN, p.hp, p.max_hp, 
-        C.Fore.RED, p.weapon[NAME], 
+        C.Fore.GREEN, p.hp, p.max_hp,
+        C.Fore.RED, p.weapon[NAME],
         C.Fore.MAGENTA, p.skill_type[NAME],
         C.Fore.YELLOW, self.coins)
         print(' \{}| {}{} {}'.format('_' * EXTENSION, c_user_stats, C.Fore.WHITE, '|__/'))
@@ -307,13 +308,13 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     def sort_inventory_items(self, item_names):
         l = 7 # Length of 'Name  | ' to be used as indent
         # Tracks displayed items, so they are not repeated
-        displayed_items = [] 
+        displayed_items = []
         # key is a lowercase tag (for comparison with item tags)
         # value is a decorated text for display
         tags = {tag:tag[0].upper() + tag[1:] + (l - len(tag)) * ' ' + '| ' for tag in INVENTORY_TAGS}
         for item_name in item_names:
         # If that item got already displayed dont print second ocurrences
-            if item_name in displayed_items: 
+            if item_name in displayed_items:
                 pass
             else:
                 item_count = item_names.count(item_name)
@@ -321,7 +322,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 # Prints item count if there is more than one of that item
                 if item_count == 1:
                     x = item[NAME]
-                elif item_count > 1:       
+                elif item_count > 1:
                     x = '{}({})'.format(item[NAME], item_count)
                 # Highlights item name if it just got picked last turn
                 if item_name == self.last_item_picked:
@@ -338,7 +339,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             print(HIGHLIGHT_COLOR + _tag[0])
             _tag.remove(_tag[0])
             for line in _tag:
-                print(' ' * (l + 2) + line) 
+                print(' ' * (l + 2) + line)
         print()
 
     # Prints an ASCII map of all rooms
@@ -370,8 +371,11 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                     # If fight
                     if self.ask_fight_or_flight(ROOMS[target_room_id], dir):
                         enemies = [give_monster(x) for x in ROOMS[target_room_id][ENEMIES]]
-                        fight = combat.Combat(player.Player(self.player.name, 10, self.player.weapon), enemies)
+                        fight = combat.Combat(self.player, enemies)
                         fight.cmdloop()
+                        if self.player.hp <= 0:
+                            print ('\n')
+                            exit()
                         self.location = target_room_id
                         self.display_current_room()
                     # If user chose retreat
@@ -413,8 +417,8 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
         elif arg.lower() not in DIRECTIONS:
             self.display_current_room()
             self.error_msg(self.BAD_DIR)
-        
-    
+
+
     # Look at something (Display its LONGDESC)
     def do_look(self, arg):
         current_room = ROOMS[self.location]
@@ -435,8 +439,8 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             else:
                 self.display_current_room()
                 self.error_msg('"{}"{}'.format(arg, self.UNKNOWN_ITEM))
-            
-    
+
+
     # Pick item(s) (Remove it from ROOM[GROUND] add it to self.inventory)
     def do_pick(self, *args: str) -> None:
         """Pick item(s) with in a current room
@@ -519,7 +523,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             else:
                 self.display_current_room()
                 self.error_msg('"{}"{}'.format(arg, self.UNKNOWN_ITEM))
-    
+
     # Drops an item (Remove it from inventory, add it to current_room's GROUND)
     def do_drop(self, arg):
         current_room = ROOMS[self.location]
@@ -550,7 +554,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 # WTH IS THAT ITEM? NEVER HEARD OF IT
                 self.display_current_room()
                 self.error_msg('"{}"{}'.format(arg, self.UNKNOWN_ITEM))
-    
+
     def do_buy(self, arg):
         current_room = ROOMS[self.location]
         # THIS IS A SHOP AND YOU CAN INTERACT WITH IT
@@ -579,7 +583,11 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             self.display_current_room()
             self.error_msg(self.NOT_SHOP)
 
-if __name__ == '__main__':
-    me = player.Player('Bori', 10, WEAPONS[FIST])
-    world = Dungeon(me, ROOMS)
-    world.cmdloop()
+    def do_die(self,arg):
+            print ('\nYou Smash your head repeatedly into a wall until you die :)\n')
+            exit()
+
+#if __name__ == '__main__':
+#    me = player.Player('Bori', 10, WEAPONS[FIST])
+#    world = Dungeon(me, ROOMS)
+#    world.cmdloop()

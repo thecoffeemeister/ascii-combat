@@ -11,6 +11,7 @@ SHOPINTRO (Greetings if room is shop)
 '''
 # Imports package namespace which contain all constants
 from dicts import *
+from dicts.proc_gen import make_dungeon_map
 
 # Returns rooms exits as a dictionary of {DIRECTION: DESTINATION, ...}
 def get_room_exits(room):
@@ -72,7 +73,7 @@ ROOMS = {
         DOWN: 'house_63',
         GROUND: ['dagger'],
         SHOP: [],
-        ENEMIES: ['spider', 'spider', 'wolf'],
+        ENEMIES: ['spider','spider'],
         SEEN: False,
     },
     'bakery': {
@@ -111,7 +112,7 @@ ROOMS = {
         NAME: 'Courtyard',
         USERDESC: 'You come to a courtyard strewn with flowers, protected by small ornate cast-iron fences.',
         DESC: 'A cardinal sings, sitting atop a distant fence. You faintly make out the smell of bread, and hear voices from the south.',
-        NORTH: None,
+        NORTH: 'satan_entrance',
         SOUTH: 'town_square',
         EAST: None,
         WEST: None,
@@ -121,5 +122,108 @@ ROOMS = {
         SHOP: [],
         ENEMIES: [],
         SEEN: False,
+    },
+    'satan_entrance': {
+        NAME: 'Satan\'s Reach',
+        USERDESC: 'You come to a large and forbidden castle made from iridescent blood colored stones',
+        DESC: 'The howling of terrible beasts can be faintly heard within. The smell of decay and feces hangs strong in the air.',
+        NORTH: 'house_63',
+        SOUTH: 'courtyard',
+        EAST: None,
+        WEST: None,
+        UP: None,
+        DOWN: None,
+        GROUND: ['sausage'],
+        SHOP: None,
+        ENEMIES: ['guard','guard'],
+        SEEN: False
     }
 }
+
+ROOMS_TEMPLATE = {
+    'gross': {
+        NAME: 'Large Cave',
+        USERDESC: 'You are in a large cavern, the ceiling above is dripping with unmentionable fluids.',
+        DESC: 'A foul wind whistles through the cavern. Black crystals in the wall pulse with an evil light.',
+        NORTH: None,
+        SOUTH: None,
+        EAST: None,
+        WEST: None,
+        UP: None,
+        DOWN: None,
+        GROUND: ['beef'],
+        SHOP: [],
+        ENEMIES: ['bear'],
+        SEEN: False,
+    },
+    'disgusting': {
+        NAME: "Small Cave",
+        USERDESC: 'You are in a tiny tunnel. You spot the decayed remains of another adventurer under a pile of rocks.',
+        DESC: 'This cave looks like it is going to collapse.',
+        NORTH: None,
+        SOUTH: None,
+        EAST: None,
+        WEST: None,
+        UP: None,
+        DOWN: None,
+        GROUND: ['coin', 'dagger'],
+        SHOP: [],
+        ENEMIES: [],
+        SEEN: False,
+    },
+    'yuck': {
+        NAME: "Medium Cave",
+        USERDESC: 'You are in a perfectly cylindrcal cave. It smells like poop and fear. ...Wait, that\'s just you.',
+        DESC: 'Rusted cages full of mewling homeless people fill the room. Oil brazers fill the room with smoke and carbonmonoxide',
+        NORTH: None,
+        SOUTH: None,
+        EAST: None,
+        WEST: None,
+        UP: None,
+        DOWN: None,
+        GROUND: ['flatbread','evergreen'],
+        SHOP: [],
+        ENEMIES: ['werewolf','alligator'],
+        SEEN: False,
+    },
+    'why': {
+        NAME: 'Chasm',
+        USERDESC: 'You stand at the edge of a vast abyss. A sentient wind, howling with wicked glee attempts to pull you down.',
+        DESC: 'The air is charged with evil sorcery.',
+        NORTH: None,
+        SOUTH: None,
+        WEST: None,
+        EAST: None,
+        UP: None,
+        DOWN: None,
+        GROUND: [],
+        ENEMIES: ['knight','wolf'],
+        SHOP: ['sausage','beef'],
+        SHOPINTRO: 'The evil wind takes your loot and tries to resell it\n# Have a look:',
+        ENEMIES: [],
+        SEEN: False,
+    },
+    'jiggly_in_a_bad_way': {
+        NAME: 'Alter',
+        USERDESC: 'You come to a dimly lit room full of hellish chanting. A corpse strewn alter brightens one side of the room.',
+        DESC: 'A group of children, aged 6 to 10 dance about in mad frenzy. The fattest child, wearing the skin of the town mayor like a robe, slits the throat of what is clearly their parent. They scatter at your approach.',
+        NORTH: None,
+        SOUTH: None,
+        EAST: None,
+        WEST: None,
+        UP: None,
+        DOWN: None,
+        GROUND: ['fountain','idol','dagger'],
+        SHOP: [],
+        ENEMIES: ['ogre','ogre'],
+        SEEN: False,
+    }
+}
+
+
+
+
+PROCGEN_ROOMS = make_dungeon_map('s',ROOMS_TEMPLATE)
+PROCGEN_STARTING_POINT = [*PROCGEN_ROOMS][0]
+ROOMS.update(PROCGEN_ROOMS)
+ROOMS['satan_entrance'][NORTH] = PROCGEN_STARTING_POINT
