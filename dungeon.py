@@ -296,12 +296,13 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                         x = input('> ')
                         if int(x) in my_weapons.keys():
                             self.player.weapon = WEAPONS[my_weapons[int(x)].lower()]
+                            print('\n\n\n')
                             return True
                         else:
                             pass
                 else:
                     # No weapons
-                    print(self.PROMPT_SIGN + "Your fist is your only weapon!")
+                    print(self.PROMPT_SIGN + "Your fist is your only weapon!\n\n\n")
 
                 return True
             # Flight, return to previous room

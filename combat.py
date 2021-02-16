@@ -39,7 +39,7 @@ class Combat(cmd.Cmd):
         if platform.system() == 'Windows':
             C.init()
         self.reset_color()
-        self.intro = input(center_screen(self.STRINGS['intro']))
+        self.intro = input(self.STRINGS['intro'])
         self.prompt = '{}{}'.format(self.PROMPT_SIGN, self.STRINGS['prompt'])
         # user/enemies variables
         self.user = user
