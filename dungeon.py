@@ -20,7 +20,7 @@ class Dungeon(cmd.Cmd):
     old_coins_list = []
     last_item_picked = None
 
-    inventory = []
+    inventory = ['dagger']
     PROMPT_SIGN = '# '
 
     # String constants used for user interaction, They are supposed to be written
@@ -90,7 +90,6 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             C.init()
         # Initialising all variables
         self.location = 'house_63'
-        self.player_hp = 10  #to store persistant hp, incidentally not working still
         self.current_room = ROOMS[self.location]
         self.coins = 0
         self.reset_color()
@@ -295,7 +294,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                     while True:
                         x = input('> ')
                         if int(x) in my_weapons.keys():
-                            self.player.weapon = WEAPONS[my_weapons[int(x)].lower()]
+                            self.player.setWeapon(WEAPONS[my_weapons[int(x)].lower()])
                             print('\n\n\n')
                             return True
                         else:

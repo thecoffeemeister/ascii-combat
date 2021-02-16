@@ -20,6 +20,12 @@ class Player(Monster):
         self.skill = 0
         self.max_skill = 3
 
+    def setWeapon(self,inweapon):
+        self.weapon = inweapon
+        self.weapon_verb = self.weapon[VERB]
+        self.skill_type = ws.SKILLS[inweapon[SKILL]]
+        self.skill = 0
+
     # Displays user stats
     def show(self, size='max'):
         print(C.Fore.MAGENTA + '>', self.name)
@@ -38,7 +44,7 @@ class Player(Monster):
         super().attack(enemy)
         if self.skill < self.max_skill:
             self.skill += 1
-    
+
     # Skill functions
     def double_trouble(self, enemy):
         enemy.hp -= ws.SKILLS[DOUBLETROUBLE]['dmg']
