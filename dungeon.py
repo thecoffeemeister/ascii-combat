@@ -66,10 +66,14 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
 
     # (buy)
     NOT_SHOP = "There is nothing to buy from here, this isn't a shop"
+    NOT_PAWN = "This isn't a pawn shop! Sell your shite elsewhere."
     BUY_ITEM = "You successfully purchased"
+    SELL_ITEM = "You successfully sold"
     NO_MONEY = "You don't have enough coins for that item"
     NOT_SOLD_HERE = "That item isn't for sale, apparently."
+    NOT_BOUGHT_HERE = 'The Pawn Master flips you a rude look and gesture "Not taking it."'
     NO_ITEM_GIVEN_BUY = '<!!> What should I buy? e.g. "buy bread"'
+    NO_ITEM_GIVEN_SELL = '<!!> What should I sell? e.g. "sell idol"'
 
     # combat
     MONSTER_CUT = ['A bunch of creepy monsters cut your path!', 'You take a step back, gazing at the pouncing beasts!',
@@ -582,6 +586,36 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             # THIS ISNT A SHOP
             self.display_current_room()
             self.error_msg(self.NOT_SHOP)
+
+#mostly works. Got to fix so that you can only sell items with a price, to prevent an error
+#also so you can only sell treasure. For game purposes.
+#(since you could make a shitton of money selling questionable sausages)
+    def do_sell(self, arg):
+        current_room = ROOMS[self.location]
+        # THIS IS A PAWN SHOP AND YOU CAN INTERACT WITH IT
+        if (current_room[SHOP]) and ('Pawn' in current_room[NAME]):
+            if arg.lower() in self.inventory:
+                if (PRICE in ITEMS[arg.lower()]) and (ITEMS[arg.lower()][TAG] == 'treasure'):
+                    price = ITEMS[arg.lower()][PRICE]
+                    self.coins += price
+                    self.inventory.remove(arg.lower())
+                    x = '{} {} for {}$'.format(self.SELL_ITEM,
+                    HIGHLIGHT_COLOR + arg.lower() + CYAN, C.Fore.YELLOW + str(price))
+                    self.last_item_picked = arg.lower()
+                    self.display_current_room()
+                    self.achieve_msg(x)
+                else:
+                    self.error_msg(self.NOT_BOUGHT_HERE)
+            # Empty input
+            elif not arg:
+                self.error_msg(self.NO_ITEM_GIVEN_SELL)
+            # THE ITEM YOU WANT IS NOT FOR SALE
+        elif arg.lower() not in self.inventory:
+                self.error_msg(self.NOT_BOUGHT_HERE)
+        else:
+            # THIS ISNT A SHOP
+            self.display_current_room()
+            self.error_msg(self.NOT_PAWN)
 
     def do_die(self,arg):
             print ('\nYou Smash your head repeatedly into a wall until you die :)\n')
