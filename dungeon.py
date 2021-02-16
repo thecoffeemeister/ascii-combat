@@ -79,6 +79,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     MONSTER_CUT = ['A bunch of creepy monsters cut your path!', 'You take a step back, gazing at the pouncing beasts!',
     'A few evil-looking creatures gaze at you mockingly', 'Creepy, spooky enemies block your way',
     ]
+    PIGGING_OUT = "You just got a little more fat."
 
     go_loadspeed = 2
 
@@ -507,6 +508,10 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 arg.lower(), WHITE)
                 # Remove item from inventory then display room
                 self.inventory.remove(arg.lower())
+                if self.player.hp >= self.player.max_hp:
+                    self.error_msg(self.PIGGING_OUT)
+                else:
+                    self.player.hp += 1
                 self.display_current_room()
                 self.achieve_msg(x)
             else:
