@@ -23,7 +23,7 @@ def get_items_grounddesc(room, item_look=None):
     for item_name in room[GROUND]:
         item = ITEMS[item_name]
         # Add item GROUNDDESC to be displayed
-        # Here it inserts 
+        # Here it inserts
         if type(item[GROUNDDESC]) is list:
             text += '{} {} {}'.format(BULLET + item[GROUNDDESC][0],
             HIGHLIGHT_COLOR + item[NAME].lower() + WHITE,
@@ -130,7 +130,7 @@ ITEMS = {
         PICKABLE: True,
         EDIBLE: False,
         PRICE: -1,
-        TAG: 'decor',
+        TAG: 'treasure',
     },
     'evergreen': {
         NAME: 'Evergreen',
@@ -170,5 +170,15 @@ ITEMS = {
         PICKABLE: True,
         EDIBLE: False,
         TAG: 'coins',
+    },
+    'chocolate':{
+        NAME: 'Chocolate',
+        GROUNDDESC: ['A piece of suspicious', 'is dropped on the ground'],
+        SHORTDESC: 'suspicious chocolate',
+        LONGDESC: "This is a chunk of chocolate. Maybe someone will want to buy it.",
+        PICKABLE: True,
+        EDIBLE: True,
+        PRICE: 12,
+        TAG: 'treasure',
     },
 }

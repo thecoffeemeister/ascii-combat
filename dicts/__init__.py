@@ -1,5 +1,5 @@
 '''
-Stores all constants needed for our dict files to work properly, stores window size, 
+Stores all constants needed for our dict files to work properly, stores window size,
 tags to be displayed in inventory, bullets and separators and dict keys.
 '''
 import colorama as C
@@ -12,7 +12,7 @@ RED = C.Fore.RED
 BRIGHT = C.Style.BRIGHT
 DIM = C.Style.NORMAL
 # This is the list of tags to be displayed in inventory
-INVENTORY_TAGS = ['food', 'weapon', 'armor'] 
+INVENTORY_TAGS = ['food', 'weapon', 'armor', 'treasure'] 
 # Max number of items that can be found in a room
 GROUND_LIMIT = 5
 # Text constants

@@ -40,7 +40,7 @@ ROOMS = {
         EAST: 'bakery',
         WEST: 'house_63',
         UP: None,
-        DOWN: None,
+        DOWN: 'pawn_shop',
         GROUND: ['fountain', 'evergreen', 'apple', 'bread', 'coin'],
         SHOP: [],
         ENEMIES: [],
@@ -56,7 +56,7 @@ ROOMS = {
         WEST: None,
         UP: 'house_63_1',
         DOWN: None,
-        GROUND: ['coin', 'apple'],
+        GROUND: ['coin', 'apple','chocolate'],
         SHOP: [],
         ENEMIES: [],
         SEEN: False,
@@ -125,9 +125,9 @@ ROOMS = {
     },
     'satan_entrance': {
         NAME: 'Satan\'s Reach',
-        USERDESC: 'You come to a large and forbidden castle made from iridescent blood colored stones',
+        USERDESC: 'You come to a large and forbidding castle made from iridescent blood colored stones',
         DESC: 'The howling of terrible beasts can be faintly heard within. The smell of decay and feces hangs strong in the air.',
-        NORTH: 'house_63',
+        NORTH: None,
         SOUTH: 'courtyard',
         EAST: None,
         WEST: None,
@@ -136,6 +136,22 @@ ROOMS = {
         GROUND: ['sausage'],
         SHOP: None,
         ENEMIES: ['guard','guard'],
+        SEEN: False
+    },
+    'pawn_shop': {
+        NAME: 'Goblin Pawn',
+        USERDESC: 'You duck under inside of a sewage grate and descend a long and winding tunnel.',
+        DESC: 'The tunnel opens into a foul chamber. A goblin has converted this space into a pawn shop.',
+        NORTH: None,
+        SOUTH: None,
+        EAST: None,
+        WEST: None,
+        UP: 'town_square',
+        DOWN: None,
+        GROUND: ['idol'],
+        SHOP: ['sausage'],
+        SHOPINTRO: 'Oi-Oi Oi-Oi!\nChu Want, Gov?',
+        ENEMIES: None,
         SEEN: False
     }
 }
