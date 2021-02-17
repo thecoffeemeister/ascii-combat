@@ -20,7 +20,7 @@ class Dungeon(cmd.Cmd):
     old_coins_list = []
     last_item_picked = None
 
-    inventory = ['dagger']
+    inventory = []
     PROMPT_SIGN = '# '
 
     # String constants used for user interaction, They are supposed to be written

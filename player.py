@@ -21,6 +21,8 @@ class Player(Monster):
         self.max_skill = 3
 
     def setWeapon(self,inweapon):
+        self.dmg = inweapon[DMG]
+        ws.set_skills_dmg(self.dmg)
         self.weapon = inweapon
         self.weapon_verb = self.weapon[VERB]
         self.skill_type = ws.SKILLS[inweapon[SKILL]]
