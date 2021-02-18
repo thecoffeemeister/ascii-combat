@@ -9,7 +9,7 @@ from monster import Monster
 
 
 class Player(Monster):
-    def __init__(self, name, hp, weapon):
+    def __init__(self, name, hp, weapon,inventoir = []):
         super().__init__(name, hp, weapon[DMG])
         # Sets skills dmg
         ws.set_skills_dmg(self.dmg)
@@ -19,6 +19,8 @@ class Player(Monster):
         self.skill_type = ws.SKILLS[weapon[SKILL]]
         self.skill = 0
         self.max_skill = 3
+        #mostly for edibles, as weapons are handled differently
+        self.inventory = inventoir
 
     def setWeapon(self,inweapon):
         self.dmg = inweapon[DMG]

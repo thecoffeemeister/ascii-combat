@@ -3,6 +3,7 @@ Instantiate this to create a Combat 'scene' containing a player and enemies
 both must be given, run the Combat.cmdloop() to start the scene
 '''
 from monster import Monster
+from dicts.items import ITEMS
 from dicts.utils import *
 import colorama as C
 import cmd, platform, os
@@ -16,19 +17,23 @@ class Combat(cmd.Cmd):
     'lose'         : 'DEFEAT, You got beaten by enemies!\nPress Enter to Exit . . .',
     'syntax_error' : 'Oops! I dont understand',
     'unknown_enemy': "I can't see that enemy!",
-    'enemy_death'  : "You eliminated",
-    'user_death'   : "You are bleeding too much.. Argh!",
-    'full_hp'      : "You are perfectly healthy!",
-    'prompt'       : 'Type <atk> to attack:\n> ',
-    'prompt_skl'   : 'Type <atk> or <skl>:\n> ',
+    'enemy_death'  : "You have been eliminated",
+    'user_death'   : "You done been murdered.. Gone up and joined the choir invisible",
+    'full_hp'      : "You are perfectly healthy?",
+    'prompt'       : 'Type <atk> to attack or <eat> to heal:\n> ',
+    'prompt_skl'   : 'Type <atk>, <skl> or <eat>:\n> ',
     'atk_choice'   : 'Attack .. Choose enemy number:\n',
     'skl_choice'   : 'Skill  .. Choose enemy number:\n',
+    'heal_choice'  : 'Heal  .. Choose item number:\n',
+    'no_nut'       : 'This shit has no nutritional value:\n',
+    'no_item'      : "You are all out of food, death is inevitable!",
     'no_skl'       : "Oops! It seems like you haven't acquired a skill yet!",
     'no_pwr'       : 'Argh! not enough power to use your skill!',
     }
 
     # Global constants
-    LIST_SYMBOL = '  *'
+
+    yLIST_SYMBOL = '  *'
     PROMPT_SIGN = '# '
 
 
@@ -260,3 +265,30 @@ class Combat(cmd.Cmd):
                 self.display()
         else:
             self.error_msg(self.STRINGS['no_pwr'])
+
+    # Returns a string of alive enemy names
+    def display_eats(self,someeats):
+        names = ''
+        counter = 1
+        for aneat in someeats:
+            names += '  {}| {}\n'.format(counter, aneat)
+            counter += 1
+        return names
+
+    #defaults to no food, also need to display food inventory in display function
+    def do_eat(self,arg):
+        if self.user.hp >= self.user.max_hp:
+            self.error_msg(self.STRINGS['full_hp'])
+            return
+        edible = [anitem for anitem in self.user.inventory if ITEMS[anitem][TAG] == 'food']
+        if edible == []:
+            self.error_msg(self.STRINGS['no_item'])
+            return
+        eatofchoice = input(self.PROMPT_SIGN + self.STRINGS['heal_choice'] + self.display_eats(edible) + '> ')
+        eatofchoice = int(eatofchoice) - 1
+        if HEAL in ITEMS[edible[eatofchoice]]:
+            self.user.hp += ITEMS[edible[eatofchoice]][HEAL]
+        else:
+            self.error_msg(self.STRINGS['no_nut'])
+        self.display()
+        self.user.inventory.remove(edible[eatofchoice])

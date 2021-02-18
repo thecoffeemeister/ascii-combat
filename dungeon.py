@@ -311,7 +311,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     # Sorts items in a list of items (particularly self.inventory) according
     # to tags and prints them
     def sort_inventory_items(self, item_names):
-        l = 7 # Length of 'Name  | ' to be used as indent
+        l = 9 # Length of 'Name  | ' to be used as indent
         # Tracks displayed items, so they are not repeated
         displayed_items = []
         # key is a lowercase tag (for comparison with item tags)
@@ -372,10 +372,11 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 # Loader between screens
                 transition(self.go_loadspeed, text=load_text + ' ' + inp + '!')
                 # If target room contains enemies, prompt for combat
-                if ROOMS[target_room_id][ENEMIES]:
+                if (ROOMS[target_room_id][ENEMIES]) and (not ROOMS[target_room_id][SEEN]):
                     # If fight
                     if self.ask_fight_or_flight(ROOMS[target_room_id], dir):
                         enemies = [give_monster(x) for x in ROOMS[target_room_id][ENEMIES]]
+                        self.player.inventory = self.inventory
                         fight = combat.Combat(self.player, enemies)
                         fight.cmdloop()
                         if self.player.hp <= 0:
@@ -498,7 +499,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
 
         return None
 
-    # Eat an item (Remove it from invetory)
+    # Eat an item (Remove it from inventory)
     def do_eat(self, arg):
         # If input is found in inventory
         if arg.lower() in self.inventory:

@@ -12,7 +12,7 @@ RED = C.Fore.RED
 BRIGHT = C.Style.BRIGHT
 DIM = C.Style.NORMAL
 # This is the list of tags to be displayed in inventory
-INVENTORY_TAGS = ['food', 'weapon', 'armor', 'treasure'] 
+INVENTORY_TAGS = ['food', 'weapon', 'armor', 'treasure']
 # Max number of items that can be found in a room
 GROUND_LIMIT = 5
 # Text constants
@@ -34,6 +34,7 @@ ISMULTI = 'ismulti'
 DOUBLETROUBLE = 'doubletrouble'
 ARROWSTORM = 'arrowstorm'
 # Rooms/items dict keys
+HEAL = 'heal'
 NAME = 'name'
 USERDESC = 'userdesc'
 DESC = 'desc'
