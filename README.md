@@ -1,9 +1,4 @@
 [![Run on Repl.it](https://repl.it/badge/github/aelmosalamy/ascii-combat)](https://repl.it/github/aelmosalamy/ascii-combat)
-
-Fork specific Note (5th Feb 2021): This fork is live, baby. Got the basis of a procedurally generated dungeon up and running, geometry is whack though. Implemented losing (through sweet sweet death), as well as a few other things I lost track of. Existing issues in the comments.  As well as the... issues
-
-NOTE 5th March 2020 - The project have been discontinued, I am planning to work on it, but I am busy working on other stuff lately, right now one of the most necessary missing features is procedural dungeon generation, the game right now works with the same dungeon every single time, the core basics are already done, more items need to be added, winning/losing elements don't exist yet, there is 2 modes: Explore mode where you can go, drop, pick, buy, eat, look on things and move accross the dungeon AND the Combat mode where you can atk, pwr and fight multiple enemies and eventually beat them (which was how this project started before I decided to expand it into a whole 1000 LOC not-so-messy but definitely need sometime to get used to the code and the project structure), I am open to any feedback or commnets and even PRs.
-
 ## ASCII Combat
 A simple CLI text adventure game, created for learning purposes.
 

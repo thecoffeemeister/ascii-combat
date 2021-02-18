@@ -2,7 +2,7 @@ from random import randrange
 from random import choice
 from dicts import *
 
-#upgrade: enforce realistic-ish geometry, maybe... (on a related note, no way to escape proc_gen map)
+#upgrade: enforce realistic-ish geometry, maybe...
 #ALL HAIL THE GREAT OLD ONES ^(;,;)^
 #                              {|}
 class Graph:
@@ -13,10 +13,12 @@ class Graph:
             self.numNodes = nodes
             self.nodeVals = [0 for i in range(nodes)]
             self.nodeIDs = [i for i in range(nodes)]
+            self.coords = [(i,0,0) for i in range(nodes)]
         else:
             self.pathMat = []
             self.numNodes = 0
             self.nodeVals = []
+            self.coords = []
 
     #allows len to be used on this class
     def __len__(self):
@@ -31,11 +33,14 @@ class Graph:
         return iter(nodind)
 
     #add a path between two nodes, with a weight of inpath, defaults to 1
-    def addPath(self,i,j,inpath = 1):
+    #the coords are just there to help the graph generator
+    def addPath(self,i,j,inpath,coord1,coord2):
         if self.pathMat != []:
             if (i >= 0) and (j >= 0):
                 if (i < self.numNodes) and (j < self.numNodes):
                     self.pathMat[i][j] = inpath
+                    self.coords[i] = coord1
+                    self.coords[j] = coord2
 
     #get the connection between two nodes, 0 is no connection
     def getPath(self,i,j):
@@ -78,14 +83,34 @@ def dchoice(indict):
 #rents in the fabric of space time, dead ends, etc)
 def make_dungeon_graph(rooms:int,roomTypes):
     dungeonMap = Graph(rooms)
+    currcoord = [0,0,0]
+    nextcoord = [0,0,0]
     for i in range(rooms):
         randochoice = dchoice(roomTypes)
         dungeonMap.addNodeVal(i,randochoice[0],randochoice[1] + str(i))
         for j in range(rooms):
-            randomRoom = randrange(rooms)
             for k in range (randrange(6) + 1):
+                randomRoom = randrange(rooms)
                 if (dungeonMap.getPath(j,randomRoom) == 0) and (choice([False,True])):
-                    dungeonMap.addPath(j,randomRoom,choice([NORTH,SOUTH,EAST,WEST,UP,DOWN]))
+                    randomDir = (choice([0,1,2]),choice([1,-1]))
+                    nextcoord[randomDir[0]] += randomDir[1]
+                    if randomDir[0] == 0:
+                        if randomDir[1] == 1:
+                            dirchoice = NORTH
+                        else:
+                            dirchoice = SOUTH
+                    elif randomDir[0] == 1:
+                        if randomDir[1] == 1:
+                            dirchoice = EAST
+                        else:
+                            dirchoice = WEST
+                    else:
+                        if randomDir[1] == 1:
+                            dirchoice = UP
+                        else:
+                            dirchoice = DOWN
+                    dungeonMap.addPath(j,randomRoom,dirchoice,currcoord,nextcoord)
+            currcoord = nextcoord
     return dungeonMap
 
 #makes a procedurally generated dungeon using room templates

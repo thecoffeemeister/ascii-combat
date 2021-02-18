@@ -214,8 +214,8 @@ ROOMS_TEMPLATE = {
         DOWN: None,
         GROUND: [],
         ENEMIES: ['knight','wolf'],
-        SHOP: ['sausage','beef'],
-        SHOPINTRO: 'The evil wind takes your loot and tries to resell it\n# Have a look:',
+        SHOP: ['sausage','beef','sword'],
+        SHOPINTRO: 'The evil wind loots your corpses and tries to resell it TO. YOU.\n# Have a look:',
         ENEMIES: [],
         SEEN: False,
     },
@@ -231,7 +231,7 @@ ROOMS_TEMPLATE = {
         DOWN: None,
         GROUND: ['fountain','idol','dagger'],
         SHOP: [],
-        ENEMIES: ['ogre','ogre'],
+        ENEMIES: ['ogre'],
         SEEN: False,
     }
 }
