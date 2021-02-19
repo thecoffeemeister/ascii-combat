@@ -13,7 +13,7 @@ class Graph:
             self.numNodes = nodes
             self.nodeVals = [0 for i in range(nodes)]
             self.nodeIDs = [i for i in range(nodes)]
-            self.coords = [(i,0,0) for i in range(nodes)]
+            self.coords = [None for i in range(nodes)]
         else:
             self.pathMat = []
             self.numNodes = 0
@@ -25,11 +25,11 @@ class Graph:
         return self.numNodes
 
     #iterates over the nodes [0] and the associated paths with each node [1]
-    #as well as the id of each node [2]
+    #as well as the id of each node [2]...also coordinates[3]
     def __iter__(self):
         nodind = []
         for i in range (self.numNodes):
-            nodind.append([self.nodeVals[i],self.pathMat[i],self.nodeIDs[i]])
+            nodind.append((self.nodeVals[i],self.pathMat[i],self.nodeIDs[i],self.coords[i]))
         return iter(nodind)
 
     #add a path between two nodes, with a weight of inpath, defaults to 1
@@ -70,48 +70,64 @@ class Graph:
         else:
             return None
 
+    #fetches the coordinate value for a node
+    def getCoord(self,i):
+        if (i >= 0) and (i < self.numNodes):
+            return self.coords[i]
+        else:
+            return None
+
 #applies random.choice to dictionaries
 def dchoice(indict):
     thech = choice([dcho for dcho in range(len(indict))])
-    cholito = list (indict)
-    cholo = cholito[thech]
-    return (indict[cholo],cholito[thech])
+    dicklist = list (indict)
+    dickkey = dicklist[thech]
+    dickval = indict[dickkey]
+    return (dickkey,dickval)
 
 #procedurally generates a version of the dungeon map, storing it in a graph.
 #Should not be used top level, for use with make_dungeon_map
-#issues?: cthonic geometry (one way paths, divergent paths leading to the same room
-#rents in the fabric of space time, dead ends, etc)
 def make_dungeon_graph(rooms:int,roomTypes):
-    dungeonMap = Graph(rooms)
+    dungeonGraph = Graph(rooms)
     currcoord = [0,0,0]
-    nextcoord = [0,0,0]
-    for i in range(rooms):
-        randochoice = dchoice(roomTypes)
-        dungeonMap.addNodeVal(i,randochoice[0],randochoice[1] + str(i))
-        for j in range(rooms):
-            for k in range (randrange(6) + 1):
-                randomRoom = randrange(rooms)
-                if (dungeonMap.getPath(j,randomRoom) == 0) and (choice([False,True])):
-                    randomDir = (choice([0,1,2]),choice([1,-1]))
-                    nextcoord[randomDir[0]] += randomDir[1]
-                    if randomDir[0] == 0:
-                        if randomDir[1] == 1:
-                            dirchoice = NORTH
-                        else:
-                            dirchoice = SOUTH
-                    elif randomDir[0] == 1:
-                        if randomDir[1] == 1:
-                            dirchoice = EAST
-                        else:
-                            dirchoice = WEST
-                    else:
-                        if randomDir[1] == 1:
-                            dirchoice = UP
-                        else:
-                            dirchoice = DOWN
-                    dungeonMap.addPath(j,randomRoom,dirchoice,currcoord,nextcoord)
+    nextcoord = None
+    for i in range(len(dungeonGraph)):
+        randomroom = dchoice(roomTypes)
+        dungeonGraph.addNodeVal(i,randomroom[1],randomroom[0] + str(i))
+    for i in range(len(dungeonGraph)):
+        if dungeonGraph.coords[i] == None:
+            dungeonGraph.coords[i] = currcoord
+        #change randrange 6 to a number based on room description
+        for j in range(choice([2,3,4,5,6])):
+            randomdir = (choice([0,1,2]),choice([1,-1]))
+            if randomdir[0] == 0:
+                cardinal = NORTH if randomdir == 1 else SOUTH
+            if randomdir[1] == 1:
+                cardinal = WEST if randomdir == 1 else EAST
+            else:
+                cardinal = UP if randomdir == 1 else DOWN
+            nextcoord = None
+            nexti = None
+            for k in range(len(dungeonGraph)):
+                nextcoord = dungeonGraph.coords[k]
+                nexti = k
+                if nextcoord == None:
+                    break
+            if nextcoord == None:
+                nextcoord = [currcoord[0],currcoord[1],currcoord[2]]
+                nextcoord[randomdir[0]] += randomdir[1]
+            else:
+                badcoords = True
+                while badcoords:
+                    nexti = randrange(len(dungeonGraph))
+                    nextcoord = dungeonGraph.coords[nexti]
+                    coordist = [currcoord[0]-nextcoord[0],currcoord[1]-nextcoord[1],currcoord[2]-nextcoord[2]]
+                    coordist = [abs(coordist[0]),abs(coordist[1]),abs(coordist[2])]
+                    coordist = coordist[0] + coordist[1] + coordist[2]
+                    badcoords = (currcoord == nextcoord) or (coordist > (len(dungeonGraph) / 3))
+            dungeonGraph.addPath(i,nexti,cardinal,currcoord,nextcoord)
             currcoord = nextcoord
-    return dungeonMap
+    return dungeonGraph
 
 #makes a procedurally generated dungeon using room templates
 #update:procedurally generate enemies and drops, don't simply rely on templates only
