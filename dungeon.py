@@ -188,7 +188,10 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
         self.display_player_info()
         current_room = ROOMS[self.location]
         # Displays current room name
-        print(C.Fore.YELLOW + banner(current_room[NAME], border='~'))
+        if current_room[SEEN]:
+            print(C.Fore.YELLOW + banner(current_room[NAME] + "--VISITED", border='~'))
+        else:
+            print(C.Fore.YELLOW + banner(current_room[NAME], border='~'))
         self.reset_color()
         # Displays room's USERDESC + DESC
         room_desc = self.PROMPT_SIGN + current_room[USERDESC] + ' ' + current_room[DESC]

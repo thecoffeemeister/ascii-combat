@@ -156,8 +156,11 @@ ROOMS = {
     }
 }
 
+#for the room code, the first number indicates the number of allowable connections
+#the second number indicates the dissalowed connections
+#...now to implement in proc_gen
 ROOMS_TEMPLATE = {
-    'gross': {
+    '5u': {
         NAME: 'Large Cave',
         USERDESC: 'You are in a large cavern, the ceiling above is dripping with unmentionable fluids.',
         DESC: 'A foul wind whistles through the cavern. Black crystals in the wall pulse with an evil light.',
@@ -172,7 +175,7 @@ ROOMS_TEMPLATE = {
         ENEMIES: ['bear'],
         SEEN: False,
     },
-    'disgusting': {
+    '2': {
         NAME: "Small Cave",
         USERDESC: 'You are in a tiny tunnel. You spot the decayed remains of another adventurer under a pile of rocks.',
         DESC: 'This cave looks like it is going to collapse.',
@@ -187,7 +190,7 @@ ROOMS_TEMPLATE = {
         ENEMIES: [],
         SEEN: False,
     },
-    'yuck': {
+    '4ud': {
         NAME: "Medium Cave",
         USERDESC: 'You are in a perfectly cylindrcal cave. It smells like poop and fear. ...Wait, that\'s just you.',
         DESC: 'Rusted cages full of mewling homeless people fill the room. Oil brazers fill the room with smoke and carbonmonoxide',
@@ -202,7 +205,7 @@ ROOMS_TEMPLATE = {
         ENEMIES: ['werewolf','alligator'],
         SEEN: False,
     },
-    'why': {
+    '3ud': {
         NAME: 'Chasm',
         USERDESC: 'You stand at the edge of a vast abyss. A sentient wind, howling with wicked glee attempts to pull you down.',
         DESC: 'The air is charged with evil sorcery.',
@@ -219,7 +222,7 @@ ROOMS_TEMPLATE = {
         ENEMIES: [],
         SEEN: False,
     },
-    'jiggly_in_a_bad_way': {
+    '1': {
         NAME: 'Alter',
         USERDESC: 'You come to a dimly lit room full of hellish chanting. A corpse strewn alter brightens one side of the room.',
         DESC: 'A group of children, aged 6 to 10 dance about in mad frenzy. The fattest child, wearing the skin of the town mayor like a robe, slits the throat of what is clearly their parent. They scatter at your approach.',
@@ -239,7 +242,7 @@ ROOMS_TEMPLATE = {
 
 
 
-PROCGEN_ROOMS = make_dungeon_map('s',ROOMS_TEMPLATE)
+PROCGEN_ROOMS = make_dungeon_map('m',ROOMS_TEMPLATE)
 PROCGEN_STARTING_POINT = [*PROCGEN_ROOMS][0]
 ROOMS.update(PROCGEN_ROOMS)
 ROOMS['satan_entrance'][NORTH] = PROCGEN_STARTING_POINT

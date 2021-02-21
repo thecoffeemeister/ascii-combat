@@ -85,12 +85,27 @@ def dchoice(indict):
     dickval = indict[dickkey]
     return (dickkey,dickval)
 
+def inverseCardinal(cardinal):
+    if cardinal == NORTH:
+        return SOUTH
+    elif cardinal == SOUTH:
+        return NORTH
+    elif cardinal == WEST:
+        return EAST
+    elif cardinal == EAST:
+        return WEST
+    elif cardinal == UP:
+        return DOWN
+    else:
+        return UP
+
 #procedurally generates a version of the dungeon map, storing it in a graph.
 #Should not be used top level, for use with make_dungeon_map
 def make_dungeon_graph(rooms:int,roomTypes):
     dungeonGraph = Graph(rooms)
     currcoord = [0,0,0]
     nextcoord = None
+    badcoords = False
     for i in range(len(dungeonGraph)):
         randomroom = dchoice(roomTypes)
         dungeonGraph.addNodeVal(i,randomroom[1],randomroom[0] + str(i))
@@ -98,7 +113,8 @@ def make_dungeon_graph(rooms:int,roomTypes):
         if dungeonGraph.coords[i] == None:
             dungeonGraph.coords[i] = currcoord
         #change randrange 6 to a number based on room description
-        for j in range(choice([2,3,4,5,6])):
+        directioncode = randomroom[0]
+        for j in range(int(directioncode[0])):
             randomdir = (choice([0,1,2]),choice([1,-1]))
             if randomdir[0] == 0:
                 cardinal = NORTH if randomdir == 1 else SOUTH
@@ -125,8 +141,23 @@ def make_dungeon_graph(rooms:int,roomTypes):
                     coordist = [abs(coordist[0]),abs(coordist[1]),abs(coordist[2])]
                     coordist = coordist[0] + coordist[1] + coordist[2]
                     badcoords = (currcoord == nextcoord) or (coordist > (len(dungeonGraph) / 3))
-            dungeonGraph.addPath(i,nexti,cardinal,currcoord,nextcoord)
-            currcoord = nextcoord
+            for dirc in directioncode:
+                if (dirc == 'n') and cardinal == NORTH:
+                    badcoords = True
+                if (dirc == 's') and cardinal == SOUTH:
+                    badcoords = True
+                if (dirc == 'e') and cardinal == EAST:
+                    badcoords = True
+                if (dirc == 'w') and cardinal == WEST:
+                    badcoords = True
+                if (dirc == 'u') and cardinal == UP:
+                    badcoords = True
+                if (dirc == 'd') and cardinal == DOWN:
+                    badcoords = True
+            if not badcoords:
+                dungeonGraph.addPath(i,nexti,cardinal,currcoord,nextcoord)
+                dungeonGraph.addPath(nexti,i,inverseCardinal(cardinal),nextcoord,currcoord)
+                currcoord = nextcoord
     return dungeonGraph
 
 #makes a procedurally generated dungeon using room templates
