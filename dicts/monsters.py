@@ -6,7 +6,7 @@ from monster import Monster
 
 MONSTER_VARIATION = ['Ruthless', 'Ferocious', 'Demonic',
                      'Brutal', 'Bloody', 'Violent', 'Wild', 'Spooky',
-                     'Murderous', 'Fierce', 'Savage', 'Monsterous', 
+                     'Murderous', 'Fierce', 'Savage', 'Monsterous',
                      'Hideous', 'Grotesque',
                     ]
 
@@ -30,6 +30,7 @@ MONSTER_SPECIES = {
     'pbag':         ['Punching-Bag', 10, 0,       ''],
     'spbag':        ['Super-Punching-Bag', 999, 0,''],
     'slime':        ['Slippery Slime', 10, 1,'squelched'],
+    'skelly':       ['Skellington', 4, 2,'shanked'],
 }
 
 # Different enemy arrangements

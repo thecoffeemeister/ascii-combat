@@ -125,7 +125,7 @@ ROOMS = {
     },
     'satan_entrance': {
         NAME: 'Satan\'s Reach',
-        USERDESC: 'You come to a large and forbidding castle made from iridescent blood colored stones',
+        USERDESC: 'You come to a large and forbidding castle made from massive blood colored stones',
         DESC: 'The howling of terrible beasts can be faintly heard within. The smell of decay and feces hangs strong in the air.',
         NORTH: None,
         SOUTH: 'courtyard',
@@ -141,7 +141,7 @@ ROOMS = {
     'pawn_shop': {
         NAME: 'Goblin Pawn',
         USERDESC: 'You duck under inside of a sewage grate and descend a long and winding tunnel.',
-        DESC: 'The tunnel opens into a foul chamber. A goblin has converted this space into a pawn shop.',
+        DESC: 'The tunnel opens into a foul chamber. A goblin in a hat has converted this space into a pawn shop.',
         NORTH: None,
         SOUTH: None,
         EAST: None,
@@ -149,8 +149,8 @@ ROOMS = {
         UP: 'town_square',
         DOWN: None,
         GROUND: ['idol'],
-        SHOP: ['sausage'],
-        SHOPINTRO: 'Oi-Oi Oi-Oi!\nChu Want, Gov?',
+        SHOP: ['sword','dagger','brigandine'],
+        SHOPINTRO: "Oi-Oi Oi-Oi! Chu Want, Gov?\n<sell>? <buy>?",
         ENEMIES: None,
         SEEN: False
     }
@@ -158,7 +158,6 @@ ROOMS = {
 
 #for the room code, the first number indicates the number of allowable connections
 #the second number indicates the dissalowed connections
-#...now to implement in proc_gen
 ROOMS_TEMPLATE = {
     '5u': {
         NAME: 'Large Cave',
@@ -170,9 +169,9 @@ ROOMS_TEMPLATE = {
         WEST: None,
         UP: None,
         DOWN: None,
-        GROUND: ['beef'],
+        GROUND: ['beef','snot'],
         SHOP: [],
-        ENEMIES: ['bear'],
+        ENEMIES: ['bear,slime'],
         SEEN: False,
     },
     '2': {
@@ -236,10 +235,23 @@ ROOMS_TEMPLATE = {
         SHOP: [],
         ENEMIES: ['ogre'],
         SEEN: False,
+    },
+    '6': {
+        NAME: 'Ball Room',
+        USERDESC: 'You enter the what was once a grand ball room. Now all that remains is ruin.',
+        DESC: 'Skellingtons dance in the hall, in mad parody of the dances they danced in life.',
+        NORTH: None,
+        SOUTH: None,
+        EAST: None,
+        WEST: None,
+        UP: None,
+        DOWN: None,
+        GROUND: ['goblet','coin','chocolate'],
+        SHOP: [],
+        ENEMIES: ['skelly','skelly'],
+        SEEN: False,
     }
 }
-
-
 
 
 PROCGEN_ROOMS = make_dungeon_map('m',ROOMS_TEMPLATE)

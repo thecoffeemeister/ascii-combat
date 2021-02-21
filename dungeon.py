@@ -20,7 +20,7 @@ class Dungeon(cmd.Cmd):
     old_coins_list = []
     last_item_picked = None
 
-    inventory = ['sword']
+    inventory = []
     PROMPT_SIGN = '# '
 
     # String constants used for user interaction, They are supposed to be written
@@ -122,6 +122,14 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
     def postloop(self):
         pass
 
+    def setClass(self,arg):
+        if arg == '1':
+            self.inventory = ['dagger','dagger']
+        elif arg == '2':
+            self.inventory = ['brigandine']
+        else:
+            self.inventory = ['goblet','cake']
+            
     # Utility functions
     # Converts any 'money' item in inventory to the user's 'coin' counter
     # based on the COIN_VALUE dictionary
