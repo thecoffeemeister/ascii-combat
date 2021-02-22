@@ -10,6 +10,7 @@ import player, combat, cmd, platform, os, textwrap
 from time import sleep
 from random import choice
 import colorama as C
+import pygame
 
 class Dungeon(cmd.Cmd):
 
@@ -127,9 +128,11 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             self.inventory = ['dagger','dagger']
         elif arg == '2':
             self.inventory = ['brigandine']
+        elif arg == 'cheat':
+            self.inventory = ['sword','bow','cake','cake','cake']
         else:
             self.inventory = ['goblet','cake']
-            
+
     # Utility functions
     # Converts any 'money' item in inventory to the user's 'coin' counter
     # based on the COIN_VALUE dictionary
@@ -403,6 +406,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 else:
                     self.location = current_room[dir]
                     self.display_current_room()
+                break
             # If the DESTINATION is empty
             elif dir == inp and not current_room[dir]:
                 self.display_current_room()
@@ -414,6 +418,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 # N/S/E/W
                 else:
                     self.error_msg('{} {}'.format(self.EMPTY_DIR, dir.upper()))
+                break
 
     # Generates a new dungeon structure using existing rooms
     def generate_dungeon(self, room_list):

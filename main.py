@@ -13,7 +13,7 @@ def main():
     set_console_size()
     yername = input('What is your name?> ')
     classtype = ""
-    while not (classtype in ['1','2','3']):
+    while not (classtype in ['1','2','3','cheat']):
         classtype = input("Pick Your Class:\n1) Daggerman\n2) Armorlady\n3) Richtwitch\n#> ")
     me = Player(yername, 10, WEAPONS[FIST])
 

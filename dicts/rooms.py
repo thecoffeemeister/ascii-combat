@@ -151,7 +151,7 @@ ROOMS = {
         GROUND: ['idol'],
         SHOP: ['sword','dagger','brigandine'],
         SHOPINTRO: "Oi-Oi Oi-Oi! Chu Want, Gov?\n<sell>? <buy>?",
-        ENEMIES: None,
+        ENEMIES: ['chicken'],
         SEEN: False
     }
 }
@@ -171,7 +171,7 @@ ROOMS_TEMPLATE = {
         DOWN: None,
         GROUND: ['beef','snot'],
         SHOP: [],
-        ENEMIES: ['bear,slime'],
+        ENEMIES: ['bear','slime'],
         SEEN: False,
     },
     '2': {
@@ -218,7 +218,6 @@ ROOMS_TEMPLATE = {
         ENEMIES: ['knight','wolf'],
         SHOP: ['sausage','beef','sword'],
         SHOPINTRO: 'The evil wind loots your corpses and tries to resell it TO. YOU.\n# Have a look:',
-        ENEMIES: [],
         SEEN: False,
     },
     '1': {

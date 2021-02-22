@@ -4,6 +4,7 @@ and sometimes, eat.
 
 > Must-have item attributes:
 NAME, GROUNDDESC, SHORTDESC, LONGDESC, PICKABLE, EDIBLE, TAG
+Also NAME attr cannot have whitespace
 
 > Optional item attributes:
 PRICE (If sold in a shop), WEAPON (If used as weapon)
@@ -204,7 +205,7 @@ ITEMS = {
         TAG: 'treasure',
     },
     'goblet':{
-        NAME: 'Golden Goblet',
+        NAME: 'Goblet',
         GROUNDDESC: ['A beautiful', '. Upon closer inspection it is made of glass beads and gold veneer.'],
         SHORTDESC: 'a fake goblet',
         LONGDESC: "This is a gold veneer goblet. Maybe a nerd will want it for their collection.",
@@ -215,8 +216,8 @@ ITEMS = {
         TAG: 'treasure',
     },
     'snot':{
-        NAME: 'Pile of Snot',
-        GROUNDDESC: ['A big', ', pulsating on the floor.'],
+        NAME: 'Snot',
+        GROUNDDESC: ['A big pile of', ', lies pulsating on the floor.'],
         SHORTDESC: 'big pile of nasty snot',
         LONGDESC: "A big pile of snot. Useful in alchemy. should fetch a good price.",
         PICKABLE: True,
