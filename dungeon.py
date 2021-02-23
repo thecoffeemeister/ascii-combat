@@ -128,10 +128,20 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             self.inventory = ['dagger','dagger']
         elif arg == '2':
             self.inventory = ['brigandine']
+            self.hpBooster()
         elif arg == 'cheat':
             self.inventory = ['sword','bow','cake','cake','cake']
         else:
             self.inventory = ['goblet','cake']
+
+    def hpBooster(self):
+        newmaxhp = 10
+        for shit in self.inventory:
+            if ITEMS[shit][TAG] == 'armor':
+                newmaxhp += 3
+        hpdiff = newmaxhp - self.player.max_hp
+        self.player.max_hp = newmaxhp
+        self.player.hp += hpdiff
 
     # Utility functions
     # Converts any 'money' item in inventory to the user's 'coin' counter
@@ -512,6 +522,8 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
 
         for item in all_items:
             _do_pick_single_item(item)
+            self.hpBooster()
+            self.display_current_room()
 
         return None
 
@@ -593,6 +605,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                     x = '{} {} for {}$'.format(self.BUY_ITEM,
                     HIGHLIGHT_COLOR + arg.lower() + CYAN, C.Fore.YELLOW + str(price))
                     self.last_item_picked = arg.lower()
+                    self.hpBooster()
                     self.display_current_room()
                     self.achieve_msg(x)
                 else:
