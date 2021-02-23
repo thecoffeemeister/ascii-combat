@@ -323,17 +323,17 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                         if int(x) in my_weapons.keys():
                             self.player.setWeapon(WEAPONS[my_weapons[int(x)].lower()],numweps[int(x)-1])
                             print('\n\n\n')
-                            return True
+                            return (True,numweps[int(x)-1])
                         else:
                             pass
                 else:
                     # No weapons
                     print(self.PROMPT_SIGN + "Your fist is your only weapon!\n\n\n")
 
-                return True
+                return (True,0)
             # Flight, return to previous room
             elif answer.lower() == 'n':
-                return False
+                return (False,0)
 
     # Sorts items in a list of items (particularly self.inventory) according
     # to tags and prints them
@@ -401,7 +401,8 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 # If target room contains enemies, prompt for combat
                 if (ROOMS[target_room_id][ENEMIES]) and (not ROOMS[target_room_id][SEEN]):
                     # If fight
-                    if self.ask_fight_or_flight(ROOMS[target_room_id], dir):
+                    forf = self.ask_fight_or_flight(ROOMS[target_room_id], dir)
+                    if forf[0]:
                         enemies = [give_monster(x) for x in ROOMS[target_room_id][ENEMIES]]
                         self.player.inventory = self.inventory
                         fight = combat.Combat(self.player, enemies)
@@ -409,6 +410,8 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                         if self.player.hp <= 0:
                             print ('\n')
                             exit()
+                        for weps in range(forf[1] - fight.user.weapon_quantity):
+                            self.inventory.remove(fight.user.weapon[NAME].lower())
                         self.location = target_room_id
                         self.display_current_room()
                     # If user chose retreat

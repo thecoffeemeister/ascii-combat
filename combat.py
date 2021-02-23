@@ -12,25 +12,26 @@ from random import randint
 
 class Combat(cmd.Cmd):
     STRINGS = {
-    'intro'        : 'You choose to fight. Enemies are staring viciously at you!\nPress Enter to start . . .',
-    'win'          : 'VICTORY, You defeated all enemies!\nPress Enter to Exit . . .',
-    'lose'         : 'DEFEAT, You got beaten by enemies!\nPress Enter to Exit . . .',
-    'syntax_error' : 'Oops! I dont understand',
-    'unknown_enemy': "I can't see that enemy!",
-    'enemy_death'  : "You have been eliminated",
-    'user_death'   : "You done been murdered.. Gone up and joined the choir invisible",
-    'full_hp'      : "You are perfectly healthy?",
-    'prompt'       : 'Type <atk> to attack or <eat> to heal:\n> ',
-    'prompt_skl'   : 'Type <atk>, <skl> or <eat>:\n> ',
-    'promp_throw'  : 'Type <atk>, <throw>, <skl> or <eat>:\n> ',
-    'atk_choice'   : 'Attack .. Choose enemy number:\n',
-    'skl_choice'   : 'Skill  .. Choose enemy number:\n',
-    'heal_choice'  : 'Heal  .. Choose item number:\n',
-    'no_nut'       : 'This shit has no nutritional value:\n',
-    'no_item'      : "You are all out of food, death is inevitable!",
-    'no_skl'       : "Oops! It seems like you haven't acquired a skill yet!",
-    'no_throw'     : "Don\'t be stupid! if you throw that, you are out of weapons",
-    'no_pwr'       : 'Argh! not enough power to use your skill!',
+    'intro'           : 'You choose to fight. Enemies are staring viciously at you!\nPress Enter to start . . .',
+    'win'             : 'VICTORY, You defeated all enemies!\nPress Enter to Exit . . .',
+    'lose'            : 'DEFEAT, You got beaten by enemies!\nPress Enter to Exit . . .',
+    'syntax_error'    : 'Oops! I dont understand',
+    'unknown_enemy'   : "I can't see that enemy!",
+    'enemy_death'     : "You have eliminated",
+    'user_death'      : "You done been murdered.. Gone up and joined the choir invisible",
+    'full_hp'         : "You are perfectly healthy?",
+    'prompt'          : 'Type <atk> to attack or <eat> to heal:\n> ',
+    'prompt_skl'      : 'Type <atk>, <skl> or <eat>:\n> ',
+    'prompt_throw'    : 'Type <atk>, <throw> or <eat>:\n> ',
+    'prompt_throw_skl': 'Type <atk>, <throw>, <skl> or <eat>:\n> ',
+    'atk_choice'      : 'Attack .. Choose enemy number:\n',
+    'skl_choice'      : 'Skill  .. Choose enemy number:\n',
+    'heal_choice'     : 'Heal  .. Choose item number:\n',
+    'no_nut'          : 'This shit has no nutritional value:\n',
+    'no_item'         : "You are all out of food, death is inevitable!",
+    'no_skl'          : "Oops! It seems like you haven't acquired a skill yet!",
+    'no_throw'        : "Don\'t be stupid! if you throw that, you are out of weapons",
+    'no_pwr'          : 'Argh! not enough power to use your skill!',
     }
 
     # Global constants
@@ -47,7 +48,10 @@ class Combat(cmd.Cmd):
             C.init()
         self.reset_color()
         self.intro = input(self.STRINGS['intro'])
-        self.prompt = '{}{}'.format(self.PROMPT_SIGN, self.STRINGS['prompt'])
+        if user.weapon_quantity <= 1:
+            self.prompt = '{}{}'.format(self.PROMPT_SIGN, self.STRINGS['prompt'])
+        else:
+            self.prompt = '{}{}'.format(self.PROMPT_SIGN, self.STRINGS['prompt_throw'])
         # user/enemies variables
         self.user = user
         self.STRINGS['player_attack'] = 'You ' + self.user.weapon_verb
@@ -56,6 +60,7 @@ class Combat(cmd.Cmd):
         self.no_of_enemies = len(enemies)
         self.enemies_dict = self.create_dictionary()
         self.enemies_attack_msg = ''
+        self.throws = ''
 
     # cmd.Cmd method overriding
     # Avoids repitition of last command
@@ -87,9 +92,15 @@ class Combat(cmd.Cmd):
             return True
         # Changes prompt if Skill is available to use
         if self.user.skill == self.user.max_skill:
-            self.prompt = self.PROMPT_SIGN + self.STRINGS['prompt_skl']
+            if self.user.weapon_quantity <= 1:
+                self.prompt = self.PROMPT_SIGN + self.STRINGS['prompt_skl']
+            else:
+                self.prompt = self.PROMPT_SIGN + self.STRINGS['prompt_throw_skl']
         else:
-            self.prompt = self.PROMPT_SIGN + self.STRINGS['prompt']
+            if self.user.weapon_quantity <= 1:
+                self.prompt = self.PROMPT_SIGN + self.STRINGS['prompt']
+            else:
+                self.prompt = self.PROMPT_SIGN + self.STRINGS['prompt_throw']
 
     # Pre/Post Loop functions
     def preloop(self):
@@ -153,9 +164,15 @@ class Combat(cmd.Cmd):
 
     def user_throw(self,enemy):
         self.user_attack_msg = "{}{}{} {} (-{}HP)".format(C.Style.BRIGHT + C.Back.BLACK + C.Fore.CYAN, self.PROMPT_SIGN,
-        self.STRINGS['player_attack'], enemy.name, self.user.dmg)
+        self.STRINGS['player_attack'], enemy.name, self.user.dmg * 2)
         self.user_attack_msg += self.enemy_death_msg(enemy, self.user.dmg)
         self.user.attack(enemy,2)
+        if self.user.weapon_quantity > 1:
+            self.user.weapon_quantity -= 1
+            if self.user.weapon_quantity > 1:
+                self.throws = '. Only '+ str(self.user.weapon_quantity - 1) + ' throws remaining!\n'
+        else:
+            self.throws = ''
 
     # Attacks enemy using the player's current skill
     def user_skill(self, enemies):
@@ -194,7 +211,10 @@ class Combat(cmd.Cmd):
             messages += self.PROMPT_SIGN + self.STRINGS['full_hp'] + C.Back.BLACK
         else:
             messages += '{}You survived enemy attacks with {}/{} HP left{}'.format(self.PROMPT_SIGN, self.user.hp, self.user.max_hp, C.Back.BLACK)
-        self.enemies_attack_msg = messages
+        if self.user.weapon_quantity <= 1:
+            self.enemies_attack_msg = messages
+        else:
+            self.enemies_attack_msg = messages + self.throws
 
     # UTILITY FUNCTIONS
     # Displays the interface: All Enemies and user status

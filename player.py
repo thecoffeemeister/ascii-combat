@@ -32,6 +32,7 @@ class Player(Monster):
         self.skill_type = ws.SKILLS[inweapon[SKILL]]
         self.skill = 0
 
+
     # Displays user stats
     def show(self, size='max'):
         print(C.Fore.MAGENTA + '>', self.name)
