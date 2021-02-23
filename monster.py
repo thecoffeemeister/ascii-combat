@@ -25,8 +25,9 @@ class Monster:
         elif shape == 'clear':
             return '\n' * 120
 
-    def attack(self, enemy):
-        enemy.hp -= self.dmg
+    def attack(self, enemy,throw_buddy=1):
+        damnage = self.dmg * throw_buddy
+        enemy.hp -= damnage
         enemy.update_data()
 
     # Returns a multi-line string of the stats
@@ -79,7 +80,7 @@ class Monster:
                 else:
                     no_variation = self.name.split(' ', 1)
                     self.name = no_variation[1]
-                    self.name = '{} {}'.format('Dead', self.name)              
+                    self.name = '{} {}'.format('Dead', self.name)
         if self.max_hp + 4 > len(self.name) + 1:
             self.length = self.max_hp + 4
         else:

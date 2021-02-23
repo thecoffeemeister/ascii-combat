@@ -19,11 +19,13 @@ class Player(Monster):
         self.skill_type = ws.SKILLS[weapon[SKILL]]
         self.skill = 0
         self.max_skill = 3
+        self.weapon_quantity = 1
         #mostly for edibles, as weapons are handled differently
         self.inventory = inventoir
 
-    def setWeapon(self,inweapon):
+    def setWeapon(self,inweapon,inweapon_quantity = 1):
         self.dmg = inweapon[DMG]
+        self.weapon_quantity = inweapon_quantity
         ws.set_skills_dmg(self.dmg)
         self.weapon = inweapon
         self.weapon_verb = self.weapon[VERB]
@@ -44,8 +46,8 @@ class Player(Monster):
             print(pwr_string)
 
     # Attacks ...
-    def attack(self, enemy):
-        super().attack(enemy)
+    def attack(self, enemy,throw_buddy=1):
+        super().attack(enemy,throw_buddy)
         if self.skill < self.max_skill:
             self.skill += 1
 

@@ -56,7 +56,7 @@ ROOMS = {
         WEST: None,
         UP: 'house_63_1',
         DOWN: None,
-        GROUND: ['coin', 'apple','chocolate','brigandine'],
+        GROUND: ['coin', 'apple','chocolate'],
         SHOP: [],
         ENEMIES: [],
         SEEN: False,

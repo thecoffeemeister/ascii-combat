@@ -6,11 +6,12 @@ from dicts.utils import *
 from dicts.rooms import *
 from dicts.items import *
 from dicts.monsters import *
+from collections import Counter
 import player, combat, cmd, platform, os, textwrap
 from time import sleep
 from random import choice
 import colorama as C
-import pygame
+#import pygame -- not yet, baby
 
 class Dungeon(cmd.Cmd):
 
@@ -125,7 +126,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
 
     def setClass(self,arg):
         if arg == '1':
-            self.inventory = ['dagger','dagger']
+            self.inventory = ['dagger','dagger','dagger']
         elif arg == '2':
             self.inventory = ['brigandine']
             self.hpBooster()
@@ -308,8 +309,10 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 clear()
                 print(RED, end=''); headline('# Prepare for fight!')
                 print(WHITE, end='')
-                weapons = [WEAPONS[x] for x in get_tag_items(self.inventory, 'weapon')]
-                my_weapons = {i+1: weapons[i][NAME] for i in range(len(weapons))}
+                weapons = [WEAPONS[x][NAME] for x in get_tag_items(self.inventory, 'weapon')]
+                numweps = list(Counter(weapons).values())
+                weapons = list(Counter(weapons).keys())
+                my_weapons = {i+1: weapons[i] for i in range(len(weapons))}
                 if my_weapons:
                     # Selecting weapon to use
                     print(self.PROMPT_SIGN + ' Pick your weapon:')
@@ -318,7 +321,7 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                     while True:
                         x = input('> ')
                         if int(x) in my_weapons.keys():
-                            self.player.setWeapon(WEAPONS[my_weapons[int(x)].lower()])
+                            self.player.setWeapon(WEAPONS[my_weapons[int(x)].lower()],numweps[int(x)-1])
                             print('\n\n\n')
                             return True
                         else:

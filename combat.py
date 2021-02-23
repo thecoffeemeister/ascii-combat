@@ -22,12 +22,14 @@ class Combat(cmd.Cmd):
     'full_hp'      : "You are perfectly healthy?",
     'prompt'       : 'Type <atk> to attack or <eat> to heal:\n> ',
     'prompt_skl'   : 'Type <atk>, <skl> or <eat>:\n> ',
+    'promp_throw'  : 'Type <atk>, <throw>, <skl> or <eat>:\n> ',
     'atk_choice'   : 'Attack .. Choose enemy number:\n',
     'skl_choice'   : 'Skill  .. Choose enemy number:\n',
     'heal_choice'  : 'Heal  .. Choose item number:\n',
     'no_nut'       : 'This shit has no nutritional value:\n',
     'no_item'      : "You are all out of food, death is inevitable!",
     'no_skl'       : "Oops! It seems like you haven't acquired a skill yet!",
+    'no_throw'     : "Don\'t be stupid! if you throw that, you are out of weapons",
     'no_pwr'       : 'Argh! not enough power to use your skill!',
     }
 
@@ -149,6 +151,12 @@ class Combat(cmd.Cmd):
         self.user_attack_msg += self.enemy_death_msg(enemy, self.user.dmg)
         self.user.attack(enemy)
 
+    def user_throw(self,enemy):
+        self.user_attack_msg = "{}{}{} {} (-{}HP)".format(C.Style.BRIGHT + C.Back.BLACK + C.Fore.CYAN, self.PROMPT_SIGN,
+        self.STRINGS['player_attack'], enemy.name, self.user.dmg)
+        self.user_attack_msg += self.enemy_death_msg(enemy, self.user.dmg)
+        self.user.attack(enemy,2)
+
     # Attacks enemy using the player's current skill
     def user_skill(self, enemies):
         my_skill = self.user.skill_type
@@ -246,6 +254,12 @@ class Combat(cmd.Cmd):
     def do_atk(self, arg):
         """Attacks a specific enemy, type <atk>"""
         self.demand_and_execute(self.user_attack)
+
+    def do_throw(self,arg):
+        if self.user.weapon_quantity > 1:
+            self.demand_and_execute(self.user_throw)
+        else:
+            self.error_msg(self.STRINGS['no_throw'])
 
     def do_skl(self, arg):
         """Unleashs special power using up all power points, type <skl>"""
