@@ -1,6 +1,9 @@
 '''
 This is just "main" module that launchs our game
 and start the cmdloop()
+
+Currently working on graph_rooms in dungeon.py
+See notes at graph_rooms function
 '''
 from dicts.weapons_skills import *
 from dicts.rooms import *

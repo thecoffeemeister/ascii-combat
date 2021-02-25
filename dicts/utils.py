@@ -107,3 +107,18 @@ def typewriter(text, speed=1):
     for char in text:
         print(char, end='', flush=True)
         sleep(delay)
+
+#counts the height and width of a multiline string
+def countHWStr(instr):
+    height = 1
+    width = 0
+    oldWidth = 0
+    for achar in instr:
+        width += 1
+        if achar == '\n':
+            height += 1
+            oldWidth = max(width,oldWidth)
+            width = 0
+    width = max(width,oldWidth)
+    width = width - 1 if width > 0 else 0
+    return (width,height)

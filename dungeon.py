@@ -6,6 +6,7 @@ from dicts.utils import *
 from dicts.rooms import *
 from dicts.items import *
 from dicts.monsters import *
+from dicts.ansi_art import *
 from collections import Counter
 import player, combat, cmd, platform, os, textwrap
 from time import sleep
@@ -374,10 +375,45 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
                 print(' ' * (l + 2) + line)
         print()
 
-    # Prints an ASCII map of all rooms
+    # Prints an ASCII map of some rooms (i.e the ghetto graphix library)
+    #closer to ansi, also a work in progress
+    #if the cursor lies outside of the set size of the terminal
+    #then it craps out, same reason it was crapping out before
+    #with the center_screen error, hence I have to slice
+    #the end two characters off, not just the trailing endline
+    #next have to use room info to produce a map with this
+    #ghetto graphics library. Will also need to colorize (because pretty)
     def graph_rooms(self):
-        # TO BE IMPLEMENTED
-        pass
+        def makeMap(textart):
+            artMap = textart.split('\n')
+            artMap = [list(aline) for aline in artMap]
+            return artMap
+
+        def insertSubMap(x,y,w,h,subMap,superMap):
+            oldx = x
+            oldy = y
+            w = min(w,AC_SCREEN_WIDTH)
+            h = min(h,AC_SCREEN_HEIGHT)
+            while y < h:
+                while x < min(w,len(subMap[y])):
+                    superMap[y][x] = subMap[y-oldy][x-oldx]
+                    x +=1
+                y += 1
+                x = oldx
+            return superMap
+
+        def makeBlankMap():
+            scrDims = (AC_SCREEN_WIDTH,AC_SCREEN_HEIGHT) #teminal dimensions
+            blankMap = [['▉' for i in range (scrDims[0])] for j in range (scrDims[1])]
+            outMap = ''
+            i = 0
+            for aline in blankMap:
+                outline = ''.join(aline)
+                i += 1
+                outMap += outline + '\n'
+            return outMap
+
+        input(makeBlankMap()[:-2])
 
     # Checks a room as seen
     @staticmethod
@@ -659,8 +695,11 @@ Check these, perhaps? NORTH/SOUTH/EAST/WEST or UP/DOWN'''
             self.error_msg(self.NOT_PAWN)
 
     def do_die(self,arg):
-            print ('\nYou Smash your head repeatedly into a wall until you die :)\n')
-            exit()
+        print ('\nYou Smash your head repeatedly into a wall until you die :)\n')
+        exit()
+
+    def do_map(self,arg):
+        self.graph_rooms()
 
 #if __name__ == '__main__':
 #    me = player.Player('Bori', 10, WEAPONS[FIST])
